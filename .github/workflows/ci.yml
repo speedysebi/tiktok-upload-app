@@ -1,0 +1,46 @@
+# Lint, unit tests and a local smoke test on every push/PR; main also deploys to GitHub Pages and
+# smoke-tests the live site.
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: pip install -r requirements-dev.txt
+      - name: ruff
+        run: ruff check . && ruff format --check .
+      - name: htmlhint
+        run: npx --yes htmlhint@1.1.4 site/*.html
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - name: unit tests
+        run: pytest -v tests/test_site.py
+      - name: smoke test (local server)
+        run: pytest -v tests/test_smoke.py
