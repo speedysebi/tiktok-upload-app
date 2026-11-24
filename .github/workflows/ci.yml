@@ -44,3 +44,38 @@ jobs:
         run: pytest -v tests/test_site.py
       - name: smoke test (local server)
         run: pytest -v tests/test_smoke.py
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  smoke-live:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - name: smoke test (live site)
+        env:
+          SITE_URL: ${{ needs.deploy.outputs.page_url || 'https://speedysebi.github.io/tiktok-upload-app/' }}
+        run: |
+          # Pages can take a moment to serve a fresh deploy
+          for i in 1 2 3 4 5 6; do pytest -q tests/test_smoke.py && exit 0; sleep 20; done; exit 1
