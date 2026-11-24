@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clip Relay</title>
+  <meta name="description" content="Clip Relay is a private desktop tool that sends the owner's own edited video clips to their own TikTok accounts as drafts.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="./">Clip Relay</a>
+    <nav>
+      <a href="./">Home</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Clip Relay</h1>
+    <p>Clip Relay is a private desktop tool. One person, the account owner, runs it on their own computer to send
+      short video clips they have edited to their own TikTok accounts, as drafts in the TikTok inbox.</p>
+    <h2>How it works</h2>
+    <ol>
+      <li>The owner connects their own TikTok account once, through TikTok's official login (Login Kit).</li>
+      <li>Clip Relay uploads an edited clip to that account's TikTok inbox as a draft, using TikTok's Content
+        Posting API.</li>
+      <li>The owner opens the draft in the TikTok app, reviews it, adds the caption and publishes it by hand.
+        Clip Relay never publishes anything by itself.</li>
+    </ol>
+    <h2>Who it is for</h2>
+    <p>Only the account owner, and only with TikTok accounts they own. Clip Relay is not offered to the public: it
+      has no sign-up and no accounts of its own.</p>
+    <h2>Permissions</h2>
+    <p>Clip Relay asks TikTok for two permissions: <code>user.info.basic</code>, to check the connection still
+      works, and <code>video.upload</code>, to send drafts to the inbox. See the
+      <a href="privacy.html">Privacy Policy</a> for what is stored and the
+      <a href="terms.html">Terms of Service</a> for the rules of use.</p>
+  </main>
+  <footer>
+    <p>Clip Relay is not made, endorsed or supported by TikTok.
+      Contact: <a href="https://github.com/speedysebi/tiktok-upload-app/issues">open an issue on GitHub</a>.</p>
+  </footer>
+</body>
+</html>
